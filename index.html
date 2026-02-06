@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Bulls and Cows</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <style>
     body {
       font-family: system-ui, sans-serif;
@@ -13,13 +14,34 @@
       align-items: center;
       height: 100vh;
       margin: 0;
-      font-weight: normal;
     }
 
     .container {
+      position: relative;
       display: flex;
       flex-direction: column;
       align-items: center;
+    }
+
+    /* Floating help text (does NOT move layout) */
+    #helpText {
+      display: none;
+      position: absolute;
+      bottom: 100%;
+      margin-bottom: 12px;
+      padding: 10px 14px;
+      background: #eef;
+      border-radius: 6px;
+      font-size: 14px;
+      line-height: 1.5;
+      max-width: 320px;
+      text-align: left;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      z-index: 10;
+    }
+
+    #helpText div {
+      margin: 2px 0;
     }
 
     .game {
@@ -31,6 +53,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      position: relative;
     }
 
     .timer {
@@ -40,10 +63,18 @@
     }
 
     h2 {
-      text-align: center;
       margin: 0 0 15px;
       font-weight: normal;
-      transition: color 0.5s, opacity 0.5s;
+    }
+
+    #helpBtn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-weight: normal;
+      font-size: 20px;
+      cursor: pointer;
+      user-select: none;
     }
 
     .log {
@@ -65,22 +96,17 @@
       align-items: center;
     }
 
-    .row div:first-child, .header div:first-child {
+    .row div:first-child,
+    .header div:first-child {
       letter-spacing: 0.3ch;
     }
 
     .header {
       border-bottom: 1px solid #000;
-      font-weight: normal;
     }
 
-    .bull {
-      color: blue;
-    }
-
-    .cow {
-      color: green;
-    }
+    .bull { color: blue; }
+    .cow { color: green; }
 
     .win {
       margin-top: 10px;
@@ -90,10 +116,11 @@
       font-weight: bold;
     }
 
+    /* Controls */
     .controls {
       display: grid;
       grid-template-columns: 7ch 6ch;
-      gap: 10px;
+      gap: 50px; /* gap between input and button */
     }
 
     input {
@@ -101,7 +128,6 @@
       padding: 12px;
       font-size: 22px;
       text-align: center;
-      box-sizing: border-box;
       border-radius: 4px;
       border: 1px solid #ccc;
     }
@@ -111,190 +137,170 @@
       padding: 12px;
       font-size: 20px;
       cursor: pointer;
-      box-sizing: border-box;
       border-radius: 4px;
       border: 1px solid #ccc;
-      background-color: #f0f0f0;
+      background: #f0f0f0;
+
+      display: flex;           /* center text */
+      align-items: center;     /* vertical centering */
+      justify-content: center; /* horizontal centering */
     }
 
-    /* Image styling */
     .image-below {
-      margin-top: 40px;       /* space below game board */
-      width: 100px;           /* default small size */
-      height: auto;
-      display: block;
+      margin-top: 140px;
+      width: 100px;
     }
 
-    /* Responsive scaling for smaller screens */
     @media (max-width: 500px) {
       .image-below {
-        width: 70px;          /* smaller on mobile */
+        width: 70px;
         margin-top: 30px;
-      }
-
-      .game {
-        padding: 15px;
-      }
-
-      input {
-        width: 6ch;
-        font-size: 18px;
-      }
-
-      button {
-        width: 5ch;
-        font-size: 18px;
       }
     }
   </style>
 </head>
+
 <body>
+  <div class="container">
 
-<div class="container">
-  <div class="game">
-    <div class="timer" id="timer">00:00</div>
-    <h2 id="title">Simple Bulls & Cows</h2>
+    <div id="helpText">
+      <div>• Solve the secret digits in 7 attempts.</div>
+      <div>• Bulls mean right digit, right place.</div>
+      <div>• Cows mean right digit, wrong place.</div>
+    </div>
 
-    <div class="log" id="log">
-      <div class="header">
-        <div>****</div>
-        <div>B</div>
-        <div>C</div>
+    <div class="game">
+      <div class="timer" id="timer">00:00</div>
+      <span id="helpBtn">?</span>
+
+      <h2 id="title">Simple Bulls & Cows</h2>
+
+      <div class="log" id="log">
+        <div class="header">
+          <div>****</div>
+          <div>B</div>
+          <div>C</div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <input id="guess" maxlength="4" placeholder="0000">
+        <button id="enterBtn">Enter</button>
       </div>
     </div>
 
-    <div class="controls">
-      <input id="guess" maxlength="4" placeholder="0000" />
-      <button id="enterBtn" onclick="checkGuess()">Enter</button>
-    </div>
+    <img src="logo.png" alt="logo" class="image-below">
   </div>
 
-  <!-- Responsive image below the game board -->
-  <img src="logo.png" alt="logo" class="image-below">
-</div>
+  <script>
+    
+    let secret = generateSecret();
+    let gameOver = false;
+    let timer = 0;1
+    let timerInterval = null;
+    let firstGuessMade = false;
 
-<script>
-  let secret = generateSecret();
-  const log = document.getElementById("log");
-  const title = document.getElementById("title");
-  const inputField = document.getElementById("guess");
-  const enterBtn = document.getElementById("enterBtn");
-  const timerDisplay = document.getElementById("timer");
+    const log = document.getElementById("log");
+    const title = document.getElementById("title");
+    const input = document.getElementById("guess");
+    const button = document.getElementById("enterBtn");
+    const timerDisplay = document.getElementById("timer");
+    const helpBtn = document.getElementById("helpBtn");
+    const helpText = document.getElementById("helpText");
 
-  let gameOver = false;
-  let timer = 0;
-  let timerInterval = null;
-  let firstGuessMade = false;
-
-  function generateSecret() {
-    const digits = [];
-    while (digits.length < 4) {
-      const d = Math.floor(Math.random() * 10);
-      if (!digits.includes(d)) digits.push(d);
+    function generateSecret() {
+      const digits = [];
+      while (digits.length < 4) {
+        const d = Math.floor(Math.random() * 10);
+        if (!digits.includes(d)) digits.push(d);
+      }
+      return digits.join("");
     }
-    return digits.join("");
-  }
 
-  function formatTime(seconds) {
-    const min = Math.floor(seconds / 60).toString().padStart(2, '0');
-    const sec = (seconds % 60).toString().padStart(2, '0');
-    return `${min}:${sec}`;
-  }
+    function formatTime(sec) {
+      const m = String(Math.floor(sec / 60)).padStart(2, "0");
+      const s = String(sec % 60).padStart(2, "0");
+      return `${m}:${s}`;
+    }
 
-  function startTimer() {
-    if (firstGuessMade) return;
-    firstGuessMade = true;
-    timerInterval = setInterval(() => {
-      timer++;
-      timerDisplay.textContent = formatTime(timer);
-    }, 1000);
-  }
+    function startTimer() {
+      if (firstGuessMade) return;
+      firstGuessMade = true;
+      timerInterval = setInterval(() => {
+        timer++;
+        timerDisplay.textContent = formatTime(timer);
+      }, 1000);
+    }
 
-  function showTemporaryMessage(message) {
-    const original = "Simple Bulls & Cows";
-    title.textContent = message;
-    title.style.opacity = 1;
-    title.style.color = "red";
+    function checkGuess() {
+      if (gameOver) return;
+      startTimer();
 
-    setTimeout(() => {
-      let opacity = 1;
-      const fade = setInterval(() => {
-        opacity -= 0.05;
-        if (opacity <= 0) {
-          clearInterval(fade);
-          title.textContent = original;
+      const guess = input.value;
+
+      if (!/^\d{4}$/.test(guess) || new Set(guess).size !== 4) {
+        title.textContent = "Enter 4 Unique Digits";
+        title.style.color = "red";
+        setTimeout(() => {
+          title.textContent = "Simple Bulls & Cows";
           title.style.color = "black";
-          title.style.opacity = 1;
-        } else {
-          title.style.opacity = opacity;
-        }
-      }, 25);
-    }, 4000);
-  }
+        }, 2500);
+        return;
+      }
 
-  function checkGuess() {
-    if (gameOver) return;
+      let bulls = 0;
+      let cows = 0;
 
-    startTimer();
+      for (let i = 0; i < 4; i++) {
+        if (guess[i] === secret[i]) bulls++;
+        else if (secret.includes(guess[i])) cows++;
+      }
 
-    const guess = inputField.value;
+      log.innerHTML += `
+        <div class="row">
+          <div>${guess}</div>
+          <div class="bull">${bulls}</div>
+          <div class="cow">${cows}</div>
+        </div>
+      `;
 
-    if (!/^\d{4}$/.test(guess) || new Set(guess).size !== 4) {
-      showTemporaryMessage("4 Unique Digits");
-      return;
+      if (bulls === 4) {
+        log.innerHTML += `<div class="win">YOU WIN</div>`;
+        gameOver = true;
+        clearInterval(timerInterval);
+        input.disabled = true;
+        button.textContent = "Restart";
+        button.onclick = restart;
+      }
+
+      input.value = "";
+      input.focus();
     }
 
-    let bulls = 0;
-    let cows = 0;
-
-    for (let i = 0; i < 4; i++) {
-      if (guess[i] === secret[i]) bulls++;
-      else if (secret.includes(guess[i])) cows++;
-    }
-
-    log.innerHTML += `
-      <div class="row">
-        <div>${guess}</div>
-        <div class="bull">${bulls}</div>
-        <div class="cow">${cows}</div>
-      </div>
-    `;
-
-    if (bulls === 4) {
-      log.innerHTML += `<div class="win">YOU WIN</div>`;
-      gameOver = true;
-      inputField.disabled = true;
+    function restart() {
+      secret = generateSecret();
+      log.querySelectorAll(".row, .win").forEach(e => e.remove());
+      input.disabled = false;
+      input.value = "";
+      timer = 0;
+      timerDisplay.textContent = "00:00";
+      firstGuessMade = false;
+      gameOver = false;
+      button.textContent = "Enter";
+      button.onclick = checkGuess;
       clearInterval(timerInterval);
-      enterBtn.textContent = "Restart";
-      enterBtn.onclick = restartGame;
     }
 
-    inputField.value = "";
-    inputField.focus();
-  }
+    button.onclick = checkGuess;
+    input.addEventListener("keydown", e => {
+      if (e.key === "Enter") checkGuess();
+    });
 
-  function restartGame() {
-    secret = generateSecret();
-    log.querySelectorAll(".row, .win").forEach(el => el.remove());
-
-    inputField.disabled = false;
-    inputField.value = "";
-    inputField.focus();
-    gameOver = false;
-    firstGuessMade = false;
-    timer = 0;
-    timerDisplay.textContent = "00:00";
-    enterBtn.textContent = "Enter";
-    enterBtn.onclick = checkGuess;
-    if (timerInterval) clearInterval(timerInterval);
-  }
-
-  inputField.addEventListener("keydown", function(e) {
-    if (e.key === "Enter") {
-      checkGuess();
-    }
-  });
-</script>
-
+    helpBtn.onclick = () => {
+      const open = helpText.style.display === "block";
+      helpText.style.display = open ? "none" : "block";
+      helpBtn.textContent = open ? "?" : "x";
+    };
+  </script>
 </body>
 </html>

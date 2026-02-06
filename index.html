@@ -16,6 +16,12 @@
       font-weight: normal;
     }
 
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
     .game {
       background: white;
       padding: 20px;
@@ -110,27 +116,61 @@
       border: 1px solid #ccc;
       background-color: #f0f0f0;
     }
+
+    /* Image styling */
+    .image-below {
+      margin-top: 40px;       /* space below game board */
+      width: 100px;           /* default small size */
+      height: auto;
+      display: block;
+    }
+
+    /* Responsive scaling for smaller screens */
+    @media (max-width: 500px) {
+      .image-below {
+        width: 70px;          /* smaller on mobile */
+        margin-top: 30px;
+      }
+
+      .game {
+        padding: 15px;
+      }
+
+      input {
+        width: 6ch;
+        font-size: 18px;
+      }
+
+      button {
+        width: 5ch;
+        font-size: 18px;
+      }
+    }
   </style>
 </head>
 <body>
 
-<div class="game">
-  <div class="timer" id="timer">00:00</div>
-  <h2 id="title">Simple Bulls & Cows</h2>
+<div class="container">
+  <div class="game">
+    <div class="timer" id="timer">00:00</div>
+    <h2 id="title">Simple Bulls & Cows</h2>
 
-  <div class="log" id="log">
-    <div class="header">
-      <div>****</div>
-      <div>B</div>
-      <div>C</div>
+    <div class="log" id="log">
+      <div class="header">
+        <div>****</div>
+        <div>B</div>
+        <div>C</div>
+      </div>
     </div>
-    <!-- Guesses will be added below -->
+
+    <div class="controls">
+      <input id="guess" maxlength="4" placeholder="0000" />
+      <button id="enterBtn" onclick="checkGuess()">Enter</button>
+    </div>
   </div>
 
-  <div class="controls">
-    <input id="guess" maxlength="4" placeholder="0000" />
-    <button id="enterBtn" onclick="checkGuess()">Enter</button>
-  </div>
+  <!-- Responsive image below the game board -->
+  <img src="logo.png" alt="logo" class="image-below">
 </div>
 
 <script>
@@ -235,7 +275,6 @@
 
   function restartGame() {
     secret = generateSecret();
-    // Remove all guess rows but keep the header
     log.querySelectorAll(".row, .win").forEach(el => el.remove());
 
     inputField.disabled = false;

@@ -5,7 +5,6 @@
   <title>Simple Bulls And Cows</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Favicon -->
   <link rel="icon" href="fav.png" type="image/png">
 
   <style>
@@ -15,7 +14,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      min-height: 100vh;
       margin: 0;
     }
 
@@ -26,7 +25,7 @@
       align-items: center;
     }
 
-    /* Floating help text (does NOT move layout) */
+    /* Floating help text */
     #helpText {
       display: none;
       position: absolute;
@@ -51,7 +50,6 @@
       background: white;
       padding: 20px;
       border-radius: 10px;
-      width: fit-content;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       display: flex;
       flex-direction: column;
@@ -74,22 +72,21 @@
       position: absolute;
       top: 10px;
       right: 10px;
-      font-weight: normal;
       font-size: 20px;
       cursor: pointer;
       user-select: none;
     }
 
+    /* Guess log — NO SCROLLING */
     .log {
       font-size: 20px;
-      max-height: 180px;
-      overflow-y: auto;
       font-family: monospace;
       width: 100%;
       margin-bottom: 15px;
       display: flex;
       flex-direction: column;
       gap: 5px;
+      overflow: visible;
     }
 
     .row, .header {
@@ -106,10 +103,12 @@
 
     .header {
       border-bottom: 1px solid #000;
+      padding-bottom: 4px;
+      margin-bottom: 5px;
     }
 
-    .bull { color: blue; }
-    .cow { color: green; }
+    .bull { color: green; }
+    .cow { color: blue; }
 
     .win {
       margin-top: 10px;
@@ -119,11 +118,10 @@
       font-weight: bold;
     }
 
-    /* Controls */
     .controls {
       display: grid;
       grid-template-columns: 7ch 6ch;
-      gap: 50px; /* 100px gap between input and button */
+      gap: 50px;
     }
 
     input {
@@ -143,10 +141,9 @@
       border-radius: 4px;
       border: 1px solid #ccc;
       background: #f0f0f0;
-
-      display: flex;           /* center text */
-      align-items: center;     /* vertical centering */
-      justify-content: center; /* horizontal centering */
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .image-below {
@@ -168,8 +165,8 @@
 
     <div id="helpText">
       <div>• Solve the secret 4 digits in 7 attempts.</div>
-      <div>• Bulls mean right digit, right place.</div>
-      <div>• Cows mean right digit, wrong place.</div>
+      <div>• Bulls = right digit, right place.</div>
+      <div>• Cows = right digit, wrong place.</div>
     </div>
 
     <div class="game">
@@ -258,16 +255,16 @@
         else if (secret.includes(guess[i])) cows++;
       }
 
-      log.innerHTML += `
+      log.insertAdjacentHTML("beforeend", `
         <div class="row">
           <div>${guess}</div>
           <div class="bull">${bulls}</div>
           <div class="cow">${cows}</div>
         </div>
-      `;
+      `);
 
       if (bulls === 4) {
-        log.innerHTML += `<div class="win">YOU WIN</div>`;
+        log.insertAdjacentHTML("beforeend", `<div class="win">YOU WIN</div>`);
         gameOver = true;
         clearInterval(timerInterval);
         input.disabled = true;

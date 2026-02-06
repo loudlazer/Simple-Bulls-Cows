@@ -1,0 +1,277 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2575.5">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="en"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;title&gt;Bulls and Cows&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>body {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-family: system-ui, sans-serif;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>background: #f4f4f4;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>justify-content: center;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>align-items: center;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>height: 100vh;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>margin: 0;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-weight: normal;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>.game {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>background: white;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>padding: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border-radius: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>width: fit-content;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>box-shadow: 0 4px 10px rgba(0,0,0,0.1);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>flex-direction: column;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>align-items: center;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>.timer {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-size: 18px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>margin-bottom: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-family: monospace;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>h2 {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>text-align: center;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>margin: 0 0 15px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-weight: normal;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>transition: color 0.5s, opacity 0.5s;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>.log {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-size: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>max-height: 180px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>overflow-y: auto;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-family: monospace;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>width: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>margin-bottom: 15px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>flex-direction: column;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>gap: 5px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>.row, .header {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>display: grid;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>grid-template-columns: 7ch 6ch 6ch;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>gap: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>align-items: center;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>.row div:first-child, .header div:first-child {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>letter-spacing: 0.3ch;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>.header {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border-bottom: 1px solid #000;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-weight: normal;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>.bull {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>color: blue;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>.cow {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>color: green;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>.win {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>margin-top: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>text-align: center;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>color: green;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-size: 22px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-weight: bold;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>.controls {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>display: grid;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>grid-template-columns: 7ch 6ch;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>gap: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>input {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>width: 7ch;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>padding: 12px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-size: 22px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>text-align: center;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>box-sizing: border-box;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border-radius: 4px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border: 1px solid #ccc;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>button {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>width: 6ch;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>padding: 12px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-size: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>cursor: pointer;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>box-sizing: border-box;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border-radius: 4px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border: 1px solid #ccc;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>background-color: #f0f0f0;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;div class="game"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="timer" id="timer"&gt;00:00&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;h2 id="title"&gt;Bulls &amp; Cows&lt;/h2&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="log" id="log"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="header"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;****&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;B&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;C&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Guesses will be added below --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="controls"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;input id="guess" maxlength="4" placeholder="0000" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button id="enterBtn" onclick="checkGuess()"&gt;Enter&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>let secret = generateSecret();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const log = document.getElementById("log");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const title = document.getElementById("title");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const inputField = document.getElementById("guess");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const enterBtn = document.getElementById("enterBtn");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const timerDisplay = document.getElementById("timer");</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>let gameOver = false;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>let timer = 0;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>let timerInterval = null;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>let firstGuessMade = false;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>function generateSecret() {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const digits = [];</p>
+<p class="p1"><span class="Apple-converted-space">    </span>while (digits.length &lt; 4) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const d = Math.floor(Math.random() * 10);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (!digits.includes(d)) digits.push(d);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>return digits.join("");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>function formatTime(seconds) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const min = Math.floor(seconds / 60).toString().padStart(2, '0');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const sec = (seconds % 60).toString().padStart(2, '0');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>return `${min}:${sec}`;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>function startTimer() {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (firstGuessMade) return;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>firstGuessMade = true;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>timerInterval = setInterval(() =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>timer++;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>timerDisplay.textContent = formatTime(timer);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}, 1000);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>function showTemporaryMessage(message) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const original = "Bulls &amp; Cows";</p>
+<p class="p1"><span class="Apple-converted-space">    </span>title.textContent = message;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>title.style.opacity = 1;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>title.style.color = "red";</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>setTimeout(() =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>let opacity = 1;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const fade = setInterval(() =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>opacity -= 0.05;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (opacity &lt;= 0) {</p>
+<p class="p1"><span class="Apple-converted-space">          </span>clearInterval(fade);</p>
+<p class="p1"><span class="Apple-converted-space">          </span>title.textContent = original;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>title.style.color = "black";</p>
+<p class="p1"><span class="Apple-converted-space">          </span>title.style.opacity = 1;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">          </span>title.style.opacity = opacity;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}, 25);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}, 4000);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>function checkGuess() {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (gameOver) return;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>startTimer();</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>const guess = inputField.value;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (!/^\d{4}$/.test(guess) || new Set(guess).size !== 4) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>showTemporaryMessage("4 Unique Digits");</p>
+<p class="p1"><span class="Apple-converted-space">      </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>let bulls = 0;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let cows = 0;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>for (let i = 0; i &lt; 4; i++) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (guess[i] === secret[i]) bulls++;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>else if (secret.includes(guess[i])) cows++;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>log.innerHTML += `</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="row"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div&gt;${guess}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="bull"&gt;${bulls}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="cow"&gt;${cows}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>`;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (bulls === 4) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>log.innerHTML += `&lt;div class="win"&gt;YOU WIN&lt;/div&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>gameOver = true;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>inputField.disabled = true;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>clearInterval(timerInterval);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>enterBtn.textContent = "Restart";</p>
+<p class="p1"><span class="Apple-converted-space">      </span>enterBtn.onclick = restartGame;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>inputField.value = "";</p>
+<p class="p1"><span class="Apple-converted-space">    </span>inputField.focus();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>function restartGame() {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>secret = generateSecret();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>// Remove all guess rows but keep the header</p>
+<p class="p1"><span class="Apple-converted-space">    </span>log.querySelectorAll(".row, .win").forEach(el =&gt; el.remove());</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>inputField.disabled = false;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>inputField.value = "";</p>
+<p class="p1"><span class="Apple-converted-space">    </span>inputField.focus();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>gameOver = false;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>firstGuessMade = false;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>timer = 0;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>timerDisplay.textContent = "00:00";</p>
+<p class="p1"><span class="Apple-converted-space">    </span>enterBtn.textContent = "Enter";</p>
+<p class="p1"><span class="Apple-converted-space">    </span>enterBtn.onclick = checkGuess;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (timerInterval) clearInterval(timerInterval);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>inputField.addEventListener("keydown", function(e) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (e.key === "Enter") {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>checkGuess();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>});</p>
+<p class="p1">&lt;/script&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
